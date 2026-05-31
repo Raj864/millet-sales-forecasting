@@ -16,13 +16,78 @@ def load():
 
 df=load()
 
-st.sidebar.header("Filters")
-state=st.sidebar.multiselect("State", sorted(df["State"].unique()))
-product=st.sidebar.multiselect("Product", sorted(df["Product"].unique()))
+# st.sidebar.header("Filters")
+# state=st.sidebar.multiselect("State", sorted(df["State"].unique()))
+# product=st.sidebar.multiselect("Product", sorted(df["Product"].unique()))
 
-f=df.copy()
-if state: f=f[f["State"].isin(state)]
-if product: f=f[f["Product"].isin(product)]
+
+
+
+
+st.sidebar.header("🎛 Dashboard Filters")
+
+# State Filter
+selected_states = st.sidebar.multiselect(
+    "🌍 Select State",
+    sorted(df["State"].unique())
+)
+
+# Product Filter
+selected_products = st.sidebar.multiselect(
+    "🌾 Select Product",
+    sorted(df["Product"].unique())
+)
+
+# Channel Filter
+selected_channels = st.sidebar.multiselect(
+    "🛒 Sales Channel",
+    sorted(df["Channel"].unique())
+)
+
+# Date Range Filter
+start_date = st.sidebar.date_input(
+    "📅 Start Date",
+    df["Date"].min()
+)
+
+end_date = st.sidebar.date_input(
+    "📅 End Date",
+    df["Date"].max()
+)
+
+
+
+
+
+
+# f=df.copy()
+# if state: f=f[f["State"].isin(state)]
+# if product: f=f[f["Product"].isin(product)]
+
+
+
+
+f = df.copy()
+
+if selected_states:
+    f = f[f["State"].isin(selected_states)]
+
+if selected_products:
+    f = f[f["Product"].isin(selected_products)]
+
+if selected_channels:
+    f = f[f["Channel"].isin(selected_channels)]
+
+f = f[
+    (f["Date"] >= pd.to_datetime(start_date))
+    &
+    (f["Date"] <= pd.to_datetime(end_date))
+]
+
+
+
+
+
 
 c1,c2,c3,c4=st.columns(4)
 c1.metric("Revenue", f"₹{f['Revenue'].sum():,.0f}")
