@@ -85,6 +85,55 @@ and prioritize inventory for {best_product}.
 
 
 
+st.subheader("📦 Production Planning Simulator")
+
+increase_production = st.slider(
+    "Increase Production (%)",
+    0,
+    100,
+    20
+)
+
+current_quantity = f["Quantity"].sum()
+
+future_quantity = (
+    current_quantity *
+    (1 + increase_production/100)
+)
+
+avg_price = (
+    f["Revenue"].sum() /
+    f["Quantity"].sum()
+)
+
+expected_revenue = (
+    future_quantity *
+    avg_price
+)
+
+st.metric(
+    "Expected Revenue",
+    f"₹{expected_revenue:,.0f}"
+)
+
+st.write(
+    f"""
+Current Quantity: {current_quantity:,.0f}
+
+Future Quantity: {future_quantity:,.0f}
+
+Expected Revenue:
+₹{expected_revenue:,.0f}
+"""
+)
+
+
+
+
+
+
+
+
 
 
 
