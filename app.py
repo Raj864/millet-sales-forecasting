@@ -30,6 +30,69 @@ c2.metric("Profit", f"₹{f['Profit'].sum():,.0f}")
 c3.metric("Quantity", f"{f['Quantity'].sum():,}")
 c4.metric("Products", f["Product"].nunique())
 
+
+
+
+
+st.subheader("🤖 AI Business Insights")
+
+total_revenue = f["Revenue"].sum()
+total_profit = f["Profit"].sum()
+
+best_product = (
+    f.groupby("Product")["Revenue"]
+    .sum()
+    .idxmax()
+)
+
+best_state = (
+    f.groupby("State")["Revenue"]
+    .sum()
+    .idxmax()
+)
+
+best_channel = (
+    f.groupby("Channel")["Revenue"]
+    .sum()
+    .idxmax()
+)
+
+profit_margin = (
+    total_profit / total_revenue
+) * 100
+
+st.info(f"""
+📈 Total Revenue Generated: ₹{total_revenue:,.0f}
+
+💰 Overall Profit: ₹{total_profit:,.0f}
+
+🏆 Best Selling Product: {best_product}
+
+🌍 Best Performing State: {best_state}
+
+🛒 Most Successful Sales Channel: {best_channel}
+
+📊 Profit Margin: {profit_margin:.2f}%
+
+🎯 Recommendation:
+Increase marketing investment in {best_state}
+and prioritize inventory for {best_product}.
+""")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 daily=f.groupby("Date")["Revenue"].sum().reset_index()
 st.plotly_chart(px.line(daily,x="Date",y="Revenue",title="Revenue Trend"),use_container_width=True)
 
